@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Results: {{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in" style="max-width: 700px; margin: 4rem auto; text-align: center;">
+    <div class="glass" style="padding: 4rem 3rem;">
+        <h1 style="margin-bottom: 1rem;">Quiz Completed!</h1>
+        <p style="color: var(--text-muted); margin-bottom: 3rem;">Here is how you performed in <strong>{{ quiz.title
+                }}</strong></p>
+
+        <div
+            style="width: 200px; height: 200px; border-radius: 50%; border: 12px solid var(--glass-border); margin: 0 auto 3rem; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+            <div style="font-size: 3.5rem; font-weight: 800; color: var(--primary);">{{ score|floatformat:0 }}%</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Score
+            </div>
+
+            <!-- Simple SVG ring for progress (visual only for now) -->
+            <svg
+                style="position: absolute; top: -12px; left: -12px; width: 200px; height: 200px; transform: rotate(-90deg);">
+                <circle cx="100" cy="100" r="94" fill="none" stroke="var(--primary)" stroke-width="12"
+                    stroke-dasharray="590" stroke-dashoffset="{{ progress_offset }}"
+                    style="transition: stroke-dashoffset 2s ease-out;"></circle>
+            </svg>
+        </div>
+
+        <h2 style="margin-bottom: 1rem;">
+            {% if score >= 75 %}
+            Excellent Work, Gold Badge! 🥇
+            {% elif score >= 50 %}
+            Good Job, Silver Badge! 🥈
+            {% else %}
+            Keep Practicing! 💪
+            {% endif %}
+        </h2>
+
+        <p style="color: var(--text-muted); margin-bottom: 3rem; line-height: 1.6;">
+            You've successfully completed the challenge. Check your history to see your progress over time or try
+            another category to sharpen your mind.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="{% url 'home' %}" class="btn btn-outline" style="flex: 1;">Browse More</a>
+            <a href="{% url 'quiz_detail' quiz.slug %}" class="btn btn-primary" style="flex: 1;">Try Again</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

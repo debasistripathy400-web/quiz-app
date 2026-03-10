@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} | QuizElite{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in" style="max-width: 800px; margin: 2rem auto;">
+    <a href="{% url 'home' %}"
+        style="color: var(--text-muted); text-decoration: none; margin-bottom: 2rem; display: inline-block;">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+
+    <div class="glass" style="padding: 3rem; text-align: center;">
+        <span
+            style="background: rgba(99, 102, 241, 0.2); color: var(--primary); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.9rem; font-weight: 600;">
+            {{ quiz.category.name }}
+        </span>
+        <h1 style="font-size: 3rem; margin: 1.5rem 0;">{{ quiz.title }}</h1>
+        <p style="color: var(--text-muted); font-size: 1.2rem; line-height: 1.8; margin-bottom: 2.5rem;">
+            {{ quiz.description }}
+        </p>
+
+        <div
+            style="display: flex; justify-content: center; gap: 4rem; margin-bottom: 3rem; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 2rem 0;">
+            <div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">TIME LIMIT</div>
+                <div style="font-size: 1.5rem; font-weight: 700;">{{ quiz.time_limit_minutes }}m</div>
+            </div>
+            <div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">QUESTIONS</div>
+                <div style="font-size: 1.5rem; font-weight: 700;">{{ quiz.questions.count }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">DIFFICULTY</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">Entry</div>
+            </div>
+        </div>
+
+        <div
+            style="background: rgba(255, 255, 255, 0.03); border-radius: 1rem; padding: 1.5rem; margin-bottom: 2.5rem; text-align: left;">
+            <h4 style="margin-bottom: 0.5rem;">Quick Rules:</h4>
+            <ul style="color: var(--text-muted); font-size: 0.95rem; margin-left: 1.5rem;">
+                <li>Answers cannot be changed once the quiz is submitted.</li>
+                <li>Stay on the page to ensure your progress is saved.</li>
+                <li>Your score will be shown immediately after completion.</li>
+            </ul>
+        </div>
+
+        <a href="{% url 'quiz_take' quiz.slug %}" class="btn btn-primary"
+            style="font-size: 1.2rem; padding: 1rem 3rem;">
+            Begin Challenge
+        </a>
+    </div>
+</div>
+{% endblock %}

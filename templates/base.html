@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QuizElite | Master Your Knowledge{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <nav class="navbar glass">
+        <a href="/" class="nav-logo">QuizElite</a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'user_history' %}">My History</a></li>
+            <li><a href="/admin" target="_blank">Admin</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">{% csrf_token %}<button
+                        type="submit" class="btn btn-outline" style="padding: 0.5rem 1rem;">Logout</button></form>
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="glass animate-fade-in"
+            style="padding: 1rem; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+        <p>&copy; 2024 QuizElite. Built with Django & ✨</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

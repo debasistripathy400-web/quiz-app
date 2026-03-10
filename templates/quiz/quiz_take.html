@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Taking: {{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in" style="max-width: 900px; margin: 2rem auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 1.8rem;">{{ quiz.title }}</h1>
+        <div id="timer" class="glass" style="padding: 0.5rem 1.5rem; font-weight: 700; color: var(--secondary);">
+            <i class="far fa-clock"></i> {{ quiz.time_limit_minutes }}:00
+        </div>
+    </div>
+
+    <form method="post" id="quizForm">
+        {% csrf_token %}
+        {% for question in questions %}
+        <div class="glass" style="padding: 2.5rem; margin-bottom: 2rem;">
+            <div style="color: var(--primary); font-weight: 700; margin-bottom: 1rem;">Question {{ forloop.counter }} of
+                {{ questions|length }}</div>
+            <h3 style="font-size: 1.4rem; margin-bottom: 2rem; line-height: 1.5;">{{ question.text }}</h3>
+
+            <div style="display: grid; gap: 1rem;">
+                {% for choice in question.choices.all %}
+                <label class="choice-container" style="display: block; cursor: pointer;">
+                    <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" style="display: none;"
+                        required>
+                    <div class="choice-card glass"
+                        style="padding: 1.2rem 1.5rem; transition: all 0.2s; border: 1px solid var(--glass-border);">
+                        {{ choice.text }}
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <button type="submit" class="btn btn-primary" style="padding: 1rem 4rem; font-size: 1.2rem;">Complete
+                Quiz</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .choice-container input:checked+.choice-card {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: translateX(10px);
+    }
+
+    .choice-card:hover {
+        background: rgba(37, 99, 235, 0.05);
+    }
+</style>
+
+<script>
+    // Simple Timer
+    (function () {
+        const timeLimit = parseInt("{{ quiz.time_limit_minutes }}") || 10;
+        let timeLeft = timeLimit * 60;
+        const timerDisplay = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            if (timerDisplay) {
+                timerDisplay.innerHTML = `<i class="far fa-clock"></i> ${minutes}:${seconds}`;
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                const form = document.getElementById('quizForm');
+                if (form) form.submit();
+            }
+            timeLeft--;
+        }, 1000);
+    })();
+</script>
+{% endblock %}
