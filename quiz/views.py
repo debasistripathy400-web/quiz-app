@@ -107,16 +107,16 @@ class UserHistoryView(LoginRequiredMixin, ListView):
 @login_required
 def attempt_detail(request, pk):
     attempt = get_object_or_404(Attempt, pk=pk, user=request.user)
-    # Get all questions for this quiz and associate them with selected answers if they exist
+    # Get all questions for this quiz and associate them with selected answers
     u_ans = {ua.question_id: ua.selected_choice_id for ua in attempt.user_answers.all()}
     
     questions_data = []
     for question in attempt.quiz.questions.all():
-        selected_choice_id = u_ans.get(question.id)
+        sel_id = u_ans.get(question.id)
         questions_data.append({
             'question': question,
             'choices': question.choices.all(),
-            'selected_choice_id': selected_choice_id
+            'selected_choice_id': sel_id
         })
 
     return render(request, 'quiz/attempt_detail.html', {

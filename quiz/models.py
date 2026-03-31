@@ -61,6 +61,10 @@ class Attempt(models.Model):
     total_questions = models.PositiveIntegerField(default=0)
     completed_at = models.DateTimeField(default=timezone.now)
 
+    @property
+    def wrong_answers(self):
+        return self.total_questions - self.correct_answers
+
     def __str__(self):
         return f"{self.user.username} - {self.quiz.title} - {self.score}%"
 
