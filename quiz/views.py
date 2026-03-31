@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
@@ -107,7 +108,6 @@ class UserHistoryView(LoginRequiredMixin, ListView):
 @login_required
 def attempt_detail(request, pk):
     attempt = get_object_or_404(Attempt, pk=pk, user=request.user)
-    # Get all questions for this quiz and associate them with selected answers
     u_ans = {ua.question_id: ua.selected_choice_id for ua in attempt.user_answers.all()}
     
     questions_data = []
