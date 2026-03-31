@@ -15,7 +15,8 @@
                 <tr style="border-bottom: 2px solid var(--glass-border);">
                     <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600;">Quiz Topic</th>
                     <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600;">Date & Time</th>
-                    <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600;">Score</th>
+                    <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600;">Results</th>
+                    <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600;">Badges</th>
                     <th style="padding: 1.5rem 1rem; color: var(--text-muted); font-weight: 600; text-align: center;">
                         Action</th>
                 </tr>
@@ -30,6 +31,13 @@
                     </td>
                     <td style="padding: 1.5rem 1rem; color: var(--text-muted);">
                         {{ attempt.completed_at|date:"M d, Y" }} at {{ attempt.completed_at|date:"H:i" }}
+                    </td>
+                    <td style="padding: 1.5rem 1rem;">
+                        <div style="display: flex; gap: 0.5rem; font-size: 0.85rem; font-weight: 600;">
+                            <span style="color: var(--success);"><i class="fas fa-check-circle"></i> {{ attempt.correct_answers }} Correct</span>
+                            <span style="color: var(--danger);"><i class="fas fa-times-circle"></i> {{ attempt.total_questions|add:"-attempt.correct_answers" }} Wrong</span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.2rem;">Score: {{ attempt.score|floatformat:1 }}%</div>
                     </td>
                     <td style="padding: 1.5rem 1rem;">
                         <span

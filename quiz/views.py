@@ -61,7 +61,9 @@ class QuizTakingView(LoginRequiredMixin, View):
         Attempt.objects.create(
             user=request.user,
             quiz=quiz,
-            score=final_score
+            score=final_score,
+            correct_answers=score,
+            total_questions=total_questions
         )
         
         request.session['last_score'] = final_score

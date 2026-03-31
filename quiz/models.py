@@ -57,6 +57,8 @@ class Attempt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     score = models.FloatField()
+    correct_answers = models.PositiveIntegerField(default=0)
+    total_questions = models.PositiveIntegerField(default=0)
     completed_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
