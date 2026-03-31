@@ -37,9 +37,7 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;">
         {% for quiz in latest_quizzes %}
         <div class="glass quiz-card" style="padding: 2rem;">
-            <span
-                style="font-size: 0.8rem; text-transform: uppercase; color: var(--secondary); font-weight: 700; letter-spacing: 1px;">{{
-                quiz.category.name }}</span>
+            <!-- Category name removed -->
             <h3 style="font-size: 1.5rem; margin: 0.5rem 0 1rem 0;">{{ quiz.title }}</h3>
             <div
                 style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
