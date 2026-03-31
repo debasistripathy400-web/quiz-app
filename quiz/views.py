@@ -58,13 +58,26 @@ class QuizTakingView(LoginRequiredMixin, View):
                     pass
 
         final_score = (score / total_questions) * 100 if total_questions > 0 else 0
-        Attempt.objects.create(
+        attempt = Attempt.objects.create(
             user=request.user,
             quiz=quiz,
             score=final_score,
             correct_answers=score,
             total_questions=total_questions
         )
+        
+        # Save individual answers
+        for q_id, c_id in answers.items():
+            try:
+                question = Question.objects.get(id=q_id)
+                choice = Choice.objects.get(id=c_id)
+                UserAnswer.objects.create(
+                    attempt=attempt,
+                    question=question,
+                    selected_choice=choice
+                )
+            except (Question.DoesNotExist, Choice.DoesNotExist):
+                continue
         
         request.session['last_score'] = final_score
         return redirect('quiz_result', slug=quiz.slug)
@@ -90,6 +103,26 @@ class UserHistoryView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Attempt.objects.filter(user=self.request.user).order_by('-completed_at')
+
+@login_required
+def attempt_detail(request, pk):
+    attempt = get_object_or_404(Attempt, pk=pk, user=request.user)
+    # Get all questions for this quiz and associate them with selected answers if they exist
+    u_ans = {ua.question_id: ua.selected_choice_id for ua in attempt.user_answers.all()}
+    
+    questions_data = []
+    for question in attempt.quiz.questions.all():
+        selected_choice_id = u_ans.get(question.id)
+        questions_data.append({
+            'question': question,
+            'choices': question.choices.all(),
+            'selected_choice_id': selected_choice_id
+        })
+
+    return render(request, 'quiz/attempt_detail.html', {
+        'attempt': attempt,
+        'questions_data': questions_data
+    })
 
 def signup_view(request):
     if request.method == 'POST':

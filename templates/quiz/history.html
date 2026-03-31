@@ -48,6 +48,8 @@
                         </span>
                     </td>
                     <td style="padding: 1.5rem 1rem; text-align: center;">
+                        <a href="{% url 'attempt_detail' attempt.pk %}" class="btn btn-primary"
+                            style="padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--text-main); color: var(--bg-main); border: none; margin-right: 0.5rem;">Review</a>
                         <a href="{% url 'quiz_detail' attempt.quiz.slug %}" class="btn btn-primary"
                             style="padding: 0.5rem 1rem; font-size: 0.8rem;">Retake</a>
                     </td>
