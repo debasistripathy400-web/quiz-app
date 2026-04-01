@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login
-from .models import Category, Quiz, Question, Choice, Attempt
+from .models import Category, Quiz, Question, Choice, Attempt, UserAnswer
 
 class HomeView(ListView):
     model = Category
@@ -47,12 +47,14 @@ class QuizTakingView(LoginRequiredMixin, View):
         questions = quiz.questions.all()
         score = 0
         total_questions = questions.count()
+        answers = {}
 
         for question in questions:
             selected_choice_id = request.POST.get(f'question_{question.id}')
             if selected_choice_id:
                 try:
                     choice = Choice.objects.get(id=selected_choice_id, question=question)
+                    answers[question.id] = choice.id
                     if choice.is_correct:
                         score += 1
                 except Choice.DoesNotExist:
